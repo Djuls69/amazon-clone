@@ -1,18 +1,16 @@
 import React from 'react'
 import './App.css'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import Header from './layouts/Header'
 import Home from './layouts/Home'
-import Footer from './layouts/Footer'
+import Login from './layouts/Login'
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
       <Switch>
         <Route exact path='/' component={Home} />
+        <Route exact path='/login' component={Login} />
       </Switch>
-      <Footer />
     </BrowserRouter>
   )
 }

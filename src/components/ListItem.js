@@ -2,6 +2,7 @@ import React from 'react'
 import StarIcon from '@material-ui/icons/Star'
 import { makeStyles, Paper } from '@material-ui/core'
 import CurrencyFormat from 'react-currency-format'
+import CustomButton from './CustomButton'
 
 const useStyles = makeStyles({
   itemImageContainer: {
@@ -32,17 +33,6 @@ const useStyles = makeStyles({
   itemDescription: {
     fontSize: '1.3rem',
     fontWeight: 400
-  },
-  itemButton: {
-    padding: '0.6rem',
-    backgroundColor: '#f0c14d',
-    border: '1px solid #2f3841',
-    borderRadius: 2,
-    cursor: 'pointer'
-  },
-  itemButtonText: {
-    color: '#2f3841',
-    flex: 1
   }
 })
 
@@ -67,9 +57,7 @@ const ListItem = ({ imageURL, price, name, rating }) => {
             <StarIcon key={idx} className={classes.itemStars} />
           ))}
         </span>
-        <button className={classes.itemButton}>
-          <span className={classes.itemButtonText}>Ajouter au panier</span>
-        </button>
+        <CustomButton text='Ajouter au panier' />
       </div>
     </Paper>
   )

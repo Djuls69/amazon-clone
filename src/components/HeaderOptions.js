@@ -46,7 +46,7 @@ const HeaderOptions = () => {
   const classes = useStyles()
   return (
     <div className={classes.headerOptions}>
-      <Link to='#!' className={classes.headerLink}>
+      <Link to='/login' className={classes.headerLink}>
         <div className={classes.headerOption}>
           <span className={classes.headerOptionTextOne}>Bonjour, Identifiez-vous</span>
           <span className={classes.headerOptionTextTwo}>Se Connecter</span>
