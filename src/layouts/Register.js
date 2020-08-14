@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import CustomButton from '../components/CustomButton'
 import logo2 from '../assets/img/amazon-logo2.png'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
   login: {
@@ -52,10 +53,16 @@ const useStyles = makeStyles({
     textAlign: 'center',
     position: 'relative',
     marginBottom: '2rem'
+  },
+  dividerLink: {
+    color: '#0066c0',
+    '&:hover': {
+      textDecoration: 'underline'
+    }
   }
 })
 
-const Login = ({ history }) => {
+const Register = ({ history }) => {
   const classes = useStyles()
 
   const handleSubmit = e => {
@@ -69,24 +76,34 @@ const Login = ({ history }) => {
           <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
         </div>
         <form className={classes.loginForm} onSubmit={handleSubmit}>
-          <h1 className={classes.loginTitle}>S'identifier</h1>
+          <h1 className={classes.loginTitle}>Créer un compte</h1>
           <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>Adresse e-email</label>
+            <label className={classes.loginLabel}>Votre nom</label>
+            <input type='text' />
+          </div>
+          <div className={classes.inputForm}>
+            <label className={classes.loginLabel}>E-email</label>
             <input type='email' />
           </div>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>Mot de passe</label>
             <input type='password' />
           </div>
-          <CustomButton type='submit' text="S'identifier" />
+          <div className={classes.inputForm}>
+            <label className={classes.loginLabel}>Entrez le mot de passe à nouveau</label>
+            <input type='password' />
+          </div>
+          <CustomButton type='submit' text='Créer votre compte Amazon' />
         </form>
         <div className={classes.divider}>
-          <span>Nouveau chez Amazon ?</span>
+          <span>Vous possédez déjà un compte ?</span>{' '}
+          <Link className={classes.dividerLink} to='/login'>
+            Identifiez-vous
+          </Link>
         </div>
-        <CustomButton onClick={() => history.push('/register')} secondary text='Créer votre compte Amazon' />
       </div>
     </section>
   )
 }
 
-export default Login
+export default Register
