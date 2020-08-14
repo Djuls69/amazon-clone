@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './layouts/Header'
 import Home from './layouts/Home'
+import Footer from './layouts/Footer'
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Switch>
         <Route exact path='/' component={Home} />
       </Switch>
+      <Footer />
     </BrowserRouter>
   )
 }
