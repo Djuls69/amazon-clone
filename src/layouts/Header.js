@@ -10,7 +10,10 @@ const useStyles = makeStyles({
     background: '#131921',
     display: 'flex',
     padding: '1rem',
-    paddingRight: '2rem'
+    paddingRight: '2rem',
+    position: 'sticky',
+    top: 0,
+    zIndex: 10000
   },
   headerLogo: {
     height: '100%',
