@@ -1,99 +1,130 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { useFormik } from 'formik'
 import CustomButton from '../components/CustomButton'
 import logo2 from '../assets/img/amazon-logo2.png'
 import { Link } from 'react-router-dom'
+import { auth } from '../firebase/firebase'
+import { registerStyles } from './RegisterStyles'
+import { Alert } from '@material-ui/lab'
 
-const useStyles = makeStyles({
-  login: {
-    height: '100vh',
-    backgroundColor: '#fff'
-  },
-  loginLogo: {
-    width: '33%',
-    objectFit: 'contain'
-  },
-  container: {
-    width: '35rem',
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  loginForm: {
-    width: '100%',
-    padding: '2rem',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: '3rem'
-  },
-  loginTitle: {
-    fontSize: '2.8rem',
-    fontWeight: 400,
-    marginBottom: '2rem'
-  },
-  loginLabel: {
-    fontSize: '1.3rem',
-    fontWeight: 700
-  },
-  inputForm: {
-    display: 'flex',
-    flexDirection: 'column',
-    '& input': {
-      height: '3rem',
-      borderRadius: 3,
-      border: '1px solid #aaa',
-      marginBottom: '2rem'
-    }
-  },
-  divider: {
-    color: '#767676',
-    fontSize: '1.3rem',
-    textAlign: 'center',
-    position: 'relative',
-    marginBottom: '2rem'
-  },
-  dividerLink: {
-    color: '#0066c0',
-    '&:hover': {
-      textDecoration: 'underline'
-    }
+const validate = values => {
+  const errors = {}
+
+  if (!values.name) {
+    errors.name = "Merci d'indiquer votre nom"
   }
-})
+
+  if (!values.email) {
+    errors.email = "Merci d'indiquer votre e-mail"
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Adresse e-mail invalide'
+  }
+
+  if (!values.password) {
+    errors.password = "Merci d'indiquer votre mot de passe"
+  } else if (values.password.length < 6) {
+    errors.password = 'Au minimum 6 caractères'
+  }
+
+  if (!values.repeatPassword) {
+    errors.repeatPassword = 'Merci de répéter votre mot de passe'
+  }
+
+  if (values.repeatPassword !== values.password) {
+    errors.repeatPassword = 'Les mots de passe ne correspondent pas'
+  }
+  return errors
+}
 
 const Register = ({ history }) => {
-  const classes = useStyles()
+  const classes = registerStyles()
 
-  const handleSubmit = e => {
-    e.preventDefault()
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      repeatPassword: ''
+    },
+    validate,
+    onSubmit: values => {
+      createNewUser(values.email, values.password)
+    }
+  })
+
+  const createNewUser = async (email, password) => {
+    try {
+      await auth.createUserWithEmailAndPassword(email, password)
+      history.push('/')
+    } catch (error) {
+      console.error("Impossible d'enregistrer cet utilisateur", error.message)
+    }
   }
 
   return (
     <section className={classes.login}>
       <div className={classes.container}>
         <div style={{ textAlign: 'center' }}>
-          <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
+          <Link to='/'>
+            <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
+          </Link>
         </div>
-        <form className={classes.loginForm} onSubmit={handleSubmit}>
+        <form className={classes.loginForm} onSubmit={formik.handleSubmit}>
           <h1 className={classes.loginTitle}>Créer un compte</h1>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>Votre nom</label>
-            <input type='text' />
+            <input
+              name='name'
+              value={formik.values.name}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type='text'
+            />
+            {formik.errors.name && formik.touched.name ? <Alert severity='error'>{formik.errors.name}</Alert> : null}
           </div>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>E-email</label>
-            <input type='email' />
+            <input
+              name='email'
+              value={formik.values.email}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type='email'
+            />
+            {formik.errors.email && formik.touched.email ? <Alert severity='error'>{formik.errors.email}</Alert> : null}
           </div>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>Mot de passe</label>
-            <input type='password' />
+            <input
+              name='password'
+              value={formik.values.password}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type='password'
+            />
+            {formik.errors.password && formik.touched.password ? (
+              <Alert severity='error'>{formik.errors.password}</Alert>
+            ) : null}
           </div>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>Entrez le mot de passe à nouveau</label>
-            <input type='password' />
+            <input
+              name='repeatPassword'
+              value={formik.values.repeatPassword}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type='password'
+            />
+            {formik.errors.repeatPassword && formik.touched.repeatPassword ? (
+              <Alert severity='error'>{formik.errors.repeatPassword}</Alert>
+            ) : null}
           </div>
           <CustomButton type='submit' text='Créer votre compte Amazon' />
+          <p className={classes.formCopy}>
+            En créant un compte, vous acceptez les Conditions générales de vente d’Amazon. Veuillez consulter notre
+            Notice Protection de vos Informations Personnelles, notre Notice Cookies et notre Notice Annonces
+            publicitaires basées sur vos centres d’intérêt.
+          </p>
         </form>
         <div className={classes.divider}>
           <span>Vous possédez déjà un compte ?</span>{' '}

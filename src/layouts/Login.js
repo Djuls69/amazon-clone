@@ -1,83 +1,87 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core'
+import React, { useState } from 'react'
 import CustomButton from '../components/CustomButton'
 import logo2 from '../assets/img/amazon-logo2.png'
+import { Link } from 'react-router-dom'
+import { loginStyles } from './LoginStyles'
+import { useFormik } from 'formik'
+import { Alert } from '@material-ui/lab'
+import { auth } from '../firebase/firebase'
 
-const useStyles = makeStyles({
-  login: {
-    height: '100vh',
-    backgroundColor: '#fff'
-  },
-  loginLogo: {
-    width: '33%',
-    objectFit: 'contain'
-  },
-  container: {
-    width: '35rem',
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  loginForm: {
-    width: '100%',
-    padding: '2rem',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: '3rem'
-  },
-  loginTitle: {
-    fontSize: '2.8rem',
-    fontWeight: 400,
-    marginBottom: '2rem'
-  },
-  loginLabel: {
-    fontSize: '1.3rem',
-    fontWeight: 700
-  },
-  inputForm: {
-    display: 'flex',
-    flexDirection: 'column',
-    '& input': {
-      height: '3rem',
-      borderRadius: 3,
-      border: '1px solid #aaa',
-      marginBottom: '2rem'
-    }
-  },
-  divider: {
-    color: '#767676',
-    fontSize: '1.3rem',
-    textAlign: 'center',
-    position: 'relative',
-    marginBottom: '2rem'
+const validate = values => {
+  const errors = {}
+
+  if (!values.email) {
+    errors.email = "Merci d'entrer votre e-mail"
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Adresse e-mail invalide'
   }
-})
+
+  if (!values.password) {
+    errors.password = "Merci d'entrer votre mot de passe"
+  }
+
+  return errors
+}
 
 const Login = ({ history }) => {
-  const classes = useStyles()
+  const classes = loginStyles()
+  const [signInError, setSignInError] = useState(false)
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validate,
+    onSubmit: values => {
+      signInUser(values.email, values.password)
+    }
+  })
 
-  const handleSubmit = e => {
-    e.preventDefault()
+  const signInUser = async (email, password) => {
+    try {
+      await auth.signInWithEmailAndPassword(email, password)
+      history.push('/')
+    } catch (err) {
+      console.error(err.message)
+      setSignInError(true)
+    }
   }
 
   return (
     <section className={classes.login}>
       <div className={classes.container}>
         <div style={{ textAlign: 'center' }}>
-          <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
+          <Link to='/'>
+            <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
+          </Link>
         </div>
-        <form className={classes.loginForm} onSubmit={handleSubmit}>
+        <form className={classes.loginForm} onSubmit={formik.handleSubmit}>
           <h1 className={classes.loginTitle}>S'identifier</h1>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>Adresse e-email</label>
-            <input type='email' />
+            <input
+              name='email'
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              type='email'
+            />
+            {formik.errors.email && formik.touched.email ? <Alert severity='error'>{formik.errors.email}</Alert> : null}
           </div>
           <div className={classes.inputForm}>
             <label className={classes.loginLabel}>Mot de passe</label>
-            <input type='password' />
+            <input
+              name='password'
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              type='password'
+            />
+            {formik.errors.password && formik.touched.password ? (
+              <Alert severity='error'>{formik.errors.password}</Alert>
+            ) : null}
           </div>
+          {signInError && <Alert severity='error'>Mauvais identifiants. Merci de réessayer</Alert>}
           <CustomButton type='submit' text="S'identifier" />
         </form>
         <div className={classes.divider}>
