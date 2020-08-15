@@ -7,7 +7,8 @@ const useStyles = makeStyles({
     border: '1px solid',
     borderColor: '#a88734 #9c7e31 #846a29',
     borderRadius: 2,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    display: 'block'
   },
   itemButtonOrange: {
     backgroundColor: '#f3cf77',
