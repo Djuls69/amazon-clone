@@ -2,6 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import { connect } from 'react-redux'
+import { auth } from '../firebase/firebase'
 
 const useStyles = makeStyles({
   headerOptions: {
@@ -42,16 +44,30 @@ const useStyles = makeStyles({
   }
 })
 
-const HeaderOptions = () => {
+const mapState = ({ loggedUser }) => ({ loggedUser })
+
+const HeaderOptions = ({ loggedUser: { user } }) => {
   const classes = useStyles()
+
   return (
     <div className={classes.headerOptions}>
-      <Link to='/login' className={classes.headerLink}>
-        <div className={classes.headerOption}>
-          <span className={classes.headerOptionTextOne}>Bonjour, Identifiez-vous</span>
-          <span className={classes.headerOptionTextTwo}>Se Connecter</span>
+      {!user ? (
+        <Link to='/login' className={classes.headerLink}>
+          <div className={classes.headerOption}>
+            <span className={classes.headerOptionTextOne}>Bonjour, Identifiez-vous</span>
+            <span className={classes.headerOptionTextTwo}>Se connecter</span>
+          </div>
+        </Link>
+      ) : (
+        <div className={classes.headerLink}>
+          <div className={classes.headerOption}>
+            <span className={classes.headerOptionTextOne}>{`Bonjour ${user.name}`}</span>
+            <span onClick={() => auth.signOut()} style={{ cursor: 'pointer' }} className={classes.headerOptionTextTwo}>
+              Se déconnecter
+            </span>
+          </div>
         </div>
-      </Link>
+      )}
       <Link to='#!' className={classes.headerLink}>
         <div className={classes.headerOption}>
           <span className={classes.headerOptionTextOne}>Retour</span>
@@ -75,4 +91,4 @@ const HeaderOptions = () => {
   )
 }
 
-export default HeaderOptions
+export default connect(mapState)(HeaderOptions)

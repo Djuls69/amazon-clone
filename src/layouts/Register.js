@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import CustomButton from '../components/CustomButton'
 import logo2 from '../assets/img/amazon-logo2.png'
 import { Link } from 'react-router-dom'
-import { auth } from '../firebase/firebase'
+import { auth, db } from '../firebase/firebase'
 import { registerStyles } from './RegisterStyles'
 import { Alert } from '@material-ui/lab'
 
@@ -48,13 +48,19 @@ const Register = ({ history }) => {
     },
     validate,
     onSubmit: values => {
-      createNewUser(values.email, values.password)
+      createNewUser(values.name, values.email, values.password)
     }
   })
 
-  const createNewUser = async (email, password) => {
+  const createNewUser = async (name, email, password) => {
     try {
       await auth.createUserWithEmailAndPassword(email, password)
+      await db.collection('users').doc(auth.currentUser.uid).set({
+        id: auth.currentUser.uid,
+        name,
+        email,
+        basket: []
+      })
       history.push('/')
     } catch (error) {
       console.error("Impossible d'enregistrer cet utilisateur", error.message)

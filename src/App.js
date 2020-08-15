@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './App.css'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Home from './layouts/Home'
 import Login from './layouts/Login'
 import Register from './layouts/Register'
+import { signinUser } from './redux/actions'
+import { connect } from 'react-redux'
+import { auth, db } from './firebase/firebase'
 
-const App = () => {
+const mapDispatch = dispatch => ({
+  signinUser: user => dispatch(signinUser(user))
+})
+
+const App = ({ signinUser }) => {
+  useEffect(() => {
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        const userToLog = await db.collection('users').doc(auth.currentUser.uid).get()
+        signinUser(userToLog.data())
+      } else {
+        signinUser(user)
+      }
+    })
+  }, [signinUser])
+
   return (
     <BrowserRouter>
       <Switch>
@@ -17,4 +35,4 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(null, mapDispatch)(App)
