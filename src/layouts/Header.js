@@ -3,6 +3,7 @@ import amazonLogo from '../assets/img/amazon-logo.png'
 import { makeStyles } from '@material-ui/core'
 import SearchBar from '../components/SearchBar'
 import HeaderOptions from '../components/HeaderOptions'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
   header: {
@@ -25,7 +26,9 @@ const Header = () => {
   const classes = useStyles()
   return (
     <nav className={classes.header}>
-      <img className={classes.headerLogo} src={amazonLogo} alt='Amazon Logo' />
+      <Link style={{ width: '14rem' }} to='/'>
+        <img className={classes.headerLogo} src={amazonLogo} alt='Amazon Logo' />
+      </Link>
       <SearchBar />
       <HeaderOptions />
     </nav>
