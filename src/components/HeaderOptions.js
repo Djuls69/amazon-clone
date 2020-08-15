@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { connect } from 'react-redux'
 import { auth } from '../firebase/firebase'
@@ -46,8 +46,13 @@ const useStyles = makeStyles({
 
 const mapState = ({ loggedUser }) => ({ loggedUser })
 
-const HeaderOptions = ({ loggedUser: { user } }) => {
+const HeaderOptions = ({ loggedUser: { user }, history }) => {
   const classes = useStyles()
+
+  const signOut = () => {
+    history.push('/')
+    auth.signOut()
+  }
 
   return (
     <div className={classes.headerOptions}>
@@ -62,7 +67,7 @@ const HeaderOptions = ({ loggedUser: { user } }) => {
         <div className={classes.headerLink}>
           <div className={classes.headerOption}>
             <span className={classes.headerOptionTextOne}>{`Bonjour ${user.name}`}</span>
-            <span onClick={() => auth.signOut()} style={{ cursor: 'pointer' }} className={classes.headerOptionTextTwo}>
+            <span onClick={signOut} style={{ cursor: 'pointer' }} className={classes.headerOptionTextTwo}>
               Se déconnecter
             </span>
           </div>
@@ -80,10 +85,10 @@ const HeaderOptions = ({ loggedUser: { user } }) => {
           <span className={classes.headerOptionTextTwo}>Prime</span>
         </div>
       </Link>
-      <Link to='#!' className={classes.headerLink}>
+      <Link to={user ? `/checkout/${user.id}/basket` : '#!'} className={classes.headerLink}>
         <div className={classes.headerIcon}>
           <ShoppingCartIcon style={{ fontSize: '3.2rem' }} />
-          <span className={classes.headerBasketCount}>0</span>
+          <span className={classes.headerBasketCount}>{user ? user.basket.length : 0}</span>
           <span className={classes.headerOptionTextTwo}>Panier</span>
         </div>
       </Link>
@@ -91,4 +96,4 @@ const HeaderOptions = ({ loggedUser: { user } }) => {
   )
 }
 
-export default connect(mapState)(HeaderOptions)
+export default withRouter(connect(mapState)(HeaderOptions))

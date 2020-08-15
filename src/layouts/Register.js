@@ -2,10 +2,10 @@ import React from 'react'
 import { useFormik } from 'formik'
 import CustomButton from '../components/CustomButton'
 import logo2 from '../assets/img/amazon-logo2.png'
-import { Link } from 'react-router-dom'
-import { auth, db } from '../firebase/firebase'
+import { Link, withRouter } from 'react-router-dom'
 import { registerStyles } from './RegisterStyles'
 import { Alert } from '@material-ui/lab'
+import { auth } from '../firebase/firebase'
 
 const validate = values => {
   const errors = {}
@@ -36,7 +36,7 @@ const validate = values => {
   return errors
 }
 
-const Register = ({ history }) => {
+const Register = ({ history, changeDisplayName }) => {
   const classes = registerStyles()
 
   const formik = useFormik({
@@ -54,13 +54,8 @@ const Register = ({ history }) => {
 
   const createNewUser = async (name, email, password) => {
     try {
+      changeDisplayName(name)
       await auth.createUserWithEmailAndPassword(email, password)
-      await db.collection('users').doc(auth.currentUser.uid).set({
-        id: auth.currentUser.uid,
-        name,
-        email,
-        basket: []
-      })
       history.push('/')
     } catch (error) {
       console.error("Impossible d'enregistrer cet utilisateur", error.message)
@@ -143,4 +138,4 @@ const Register = ({ history }) => {
   )
 }
 
-export default Register
+export default withRouter(Register)

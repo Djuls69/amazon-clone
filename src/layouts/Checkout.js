@@ -1,9 +1,9 @@
 import React from 'react'
 import CheckoutItem from '../components/CheckoutItem'
 import { makeStyles, Checkbox } from '@material-ui/core'
-import { data } from '../data/data'
 import CurrencyFormat from 'react-currency-format'
 import CustomButton from '../components/CustomButton'
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles({
   checkout: {
@@ -29,7 +29,8 @@ const useStyles = makeStyles({
     }
   },
   subtotal: {
-    flex: 0.2,
+    height: '25rem',
+    width: '32rem',
     border: '1px solid #ccc',
     display: 'flex',
     flexDirection: 'column'
@@ -58,8 +59,26 @@ const useStyles = makeStyles({
   }
 })
 
-const Checkout = () => {
+const mapState = state => {
+  return {
+    user: state.loggedUser.user
+  }
+}
+
+const Checkout = ({ user, history }) => {
   const classes = useStyles()
+
+  if (!user) {
+    history.push('/')
+  }
+
+  const displayItems = () => {
+    if (user.basket.length === 0) {
+      return <h1>Pas d'articles dans votre panier.</h1>
+    }
+    return user.basket.map(item => <CheckoutItem key={item.id} {...item} />)
+  }
+
   return (
     <div className={classes.checkout}>
       <div className={classes.checkoutItems}>
@@ -67,11 +86,7 @@ const Checkout = () => {
         <div className={classes.checkoutDivider}>
           <h3>Prix</h3>
         </div>
-        {data
-          .filter((item, index) => index < 1)
-          .map(item => (
-            <CheckoutItem key={item.id} {...item} />
-          ))}
+        {displayItems()}
       </div>
       <div className={classes.subtotal}>
         <div className={classes.subtotalCopy}>
@@ -99,4 +114,4 @@ const Checkout = () => {
   )
 }
 
-export default Checkout
+export default connect(mapState)(Checkout)

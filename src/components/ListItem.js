@@ -3,6 +3,8 @@ import StarIcon from '@material-ui/icons/Star'
 import { makeStyles, Paper } from '@material-ui/core'
 import CurrencyFormat from 'react-currency-format'
 import CustomButton from './CustomButton'
+import { connect } from 'react-redux'
+import { addToCart } from '../redux/actions'
 
 const useStyles = makeStyles({
   itemImageContainer: {
@@ -36,8 +38,22 @@ const useStyles = makeStyles({
   }
 })
 
-const ListItem = ({ imageURL, price, name, rating }) => {
+const mapState = state => ({
+  user: state.loggedUser.user
+})
+
+const mapDispatch = dispatch => ({
+  addToCart: item => dispatch(addToCart(item))
+})
+
+const ListItem = ({ item, addToCart, user }) => {
+  const { imageURL, price, name, rating } = item
   const classes = useStyles()
+
+  const addToStorage = item => {
+    addToCart(item)
+  }
+
   return (
     <Paper>
       <div className={classes.itemImageContainer}>
@@ -57,10 +73,10 @@ const ListItem = ({ imageURL, price, name, rating }) => {
             <StarIcon key={idx} className={classes.itemStars} />
           ))}
         </span>
-        <CustomButton text='Ajouter au panier' />
+        <CustomButton text='Ajouter au panier' onClick={() => addToStorage(item)} />
       </div>
     </Paper>
   )
 }
 
-export default ListItem
+export default connect(mapState, mapDispatch)(ListItem)

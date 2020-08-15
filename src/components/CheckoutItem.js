@@ -17,6 +17,7 @@ const useStyles = makeStyles({
   },
   nameItem: {
     flex: 1,
+    minWidth: '35rem',
     '& h1': {
       marginBottom: '2rem',
       fontSize: '1.7rem',
@@ -25,7 +26,9 @@ const useStyles = makeStyles({
   },
   priceItem: {
     flex: 0.2,
-    textAlign: 'right'
+    textAlign: 'right',
+    fontSize: '1.7rem',
+    fontWeight: 700
   }
 })
 

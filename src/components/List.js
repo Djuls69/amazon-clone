@@ -24,7 +24,7 @@ const List = () => {
       <Grid container spacing={3}>
         {data.map(item => (
           <Grid key={item.id} className={classes.homeGridItem} item xs={6} md={3}>
-            <ListItem {...item} />
+            <ListItem item={item} />
           </Grid>
         ))}
       </Grid>
