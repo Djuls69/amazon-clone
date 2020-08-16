@@ -61,22 +61,19 @@ const useStyles = makeStyles({
 
 const mapState = state => {
   return {
-    user: state.loggedUser.user
+    user: state.loggedUser.user,
+    cart: state.cart.cart
   }
 }
 
-const Checkout = ({ user, history }) => {
+const Checkout = ({ cart }) => {
   const classes = useStyles()
 
-  if (!user) {
-    history.push('/')
-  }
-
   const displayItems = () => {
-    if (user.basket.length === 0) {
+    if (cart.length === 0) {
       return <h1>Pas d'articles dans votre panier.</h1>
     }
-    return user.basket.map(item => <CheckoutItem key={item.id} {...item} />)
+    return cart.map(item => <CheckoutItem key={item.id} {...item} />)
   }
 
   return (

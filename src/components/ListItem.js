@@ -39,7 +39,8 @@ const useStyles = makeStyles({
 })
 
 const mapState = state => ({
-  user: state.loggedUser.user
+  user: state.loggedUser.user,
+  cart: state.cart.cart
 })
 
 const mapDispatch = dispatch => ({
@@ -49,10 +50,6 @@ const mapDispatch = dispatch => ({
 const ListItem = ({ item, addToCart, user }) => {
   const { imageURL, price, name, rating } = item
   const classes = useStyles()
-
-  const addToStorage = item => {
-    addToCart(item)
-  }
 
   return (
     <Paper>
@@ -73,7 +70,12 @@ const ListItem = ({ item, addToCart, user }) => {
             <StarIcon key={idx} className={classes.itemStars} />
           ))}
         </span>
-        <CustomButton text='Ajouter au panier' onClick={() => addToStorage(item)} />
+        <CustomButton
+          text='Ajouter au panier'
+          onClick={() => {
+            addToCart(item)
+          }}
+        />
       </div>
     </Paper>
   )

@@ -44,9 +44,12 @@ const useStyles = makeStyles({
   }
 })
 
-const mapState = ({ loggedUser }) => ({ loggedUser })
+const mapState = state => ({
+  loggedUser: state.loggedUser,
+  cart: state.cart.cart
+})
 
-const HeaderOptions = ({ loggedUser: { user }, history }) => {
+const HeaderOptions = ({ cart, loggedUser: { user }, history }) => {
   const classes = useStyles()
 
   const signOut = () => {
@@ -88,7 +91,7 @@ const HeaderOptions = ({ loggedUser: { user }, history }) => {
       <Link to={user ? `/checkout/${user.id}/basket` : '#!'} className={classes.headerLink}>
         <div className={classes.headerIcon}>
           <ShoppingCartIcon style={{ fontSize: '3.2rem' }} />
-          <span className={classes.headerBasketCount}>0</span>
+          <span className={classes.headerBasketCount}>{cart.length}</span>
           <span className={classes.headerOptionTextTwo}>Panier</span>
         </div>
       </Link>
