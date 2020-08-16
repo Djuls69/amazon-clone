@@ -76,19 +76,19 @@ const HeaderOptions = ({ cart, loggedUser: { user }, history }) => {
           </div>
         </div>
       )}
-      <Link to='#!' className={classes.headerLink}>
+      <Link to='/' className={classes.headerLink}>
         <div className={classes.headerOption}>
           <span className={classes.headerOptionTextOne}>Retour</span>
           <span className={classes.headerOptionTextTwo}>et Commandes</span>
         </div>
       </Link>
-      <Link to='#!' className={classes.headerLink}>
+      <Link to='/' className={classes.headerLink}>
         <div className={classes.headerOption}>
           <span className={classes.headerOptionTextOne}>Testez</span>
           <span className={classes.headerOptionTextTwo}>Prime</span>
         </div>
       </Link>
-      <Link to={user ? `/checkout/${user.id}/basket` : '#!'} className={classes.headerLink}>
+      <Link to='/checkout/basket' className={classes.headerLink}>
         <div className={classes.headerIcon}>
           <ShoppingCartIcon style={{ fontSize: '3.2rem' }} />
           <span className={classes.headerBasketCount}>{cart.length}</span>

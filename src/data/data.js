@@ -11,7 +11,7 @@ export const data = [
   {
     id: uuidv4(),
     imageURL: 'https://m.media-amazon.com/images/I/715eb8A2H7L._AC._SR360,460.jpg',
-    price: '79.9',
+    price: 79.9,
     name: "HP ENVY 6020 Imprimante Tout-en-Un Jet d'Encre",
     rating: 4
   },

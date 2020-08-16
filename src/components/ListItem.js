@@ -70,12 +70,7 @@ const ListItem = ({ item, addToCart, user }) => {
             <StarIcon key={idx} className={classes.itemStars} />
           ))}
         </span>
-        <CustomButton
-          text='Ajouter au panier'
-          onClick={() => {
-            addToCart(item)
-          }}
-        />
+        <CustomButton text='Ajouter au panier' onClick={() => addToCart(item)} />
       </div>
     </Paper>
   )

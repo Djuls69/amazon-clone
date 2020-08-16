@@ -22,9 +22,9 @@ const useStyles = makeStyles({
     flex: 1,
     minWidth: '35rem',
     '& h1': {
-      marginBottom: '2rem',
       fontSize: '1.7rem',
-      fontWeight: 700
+      fontWeight: 700,
+      marginBottom: '1rem'
     }
   },
   priceItem: {
@@ -32,6 +32,10 @@ const useStyles = makeStyles({
     textAlign: 'right',
     fontSize: '1.7rem',
     fontWeight: 700
+  },
+  priceQuantity: {
+    fontSize: '1.2rem',
+    marginBottom: '2rem'
   }
 })
 
@@ -39,13 +43,16 @@ const mapDispatch = dispatch => ({
   removeItem: id => dispatch(removeToCart(id))
 })
 
-const CheckoutItem = ({ id, imageURL, name, price, removeItem }) => {
+const CheckoutItem = ({ id, imageURL, name, quantity, price, removeItem }) => {
   const classes = useStyles()
   return (
     <div className={classes.checkoutItem}>
       <img className={classes.imageItem} src={imageURL} alt={name} />
       <div className={classes.nameItem}>
         <h1>{name}</h1>
+        <p className={classes.priceQuantity}>
+          Quantité: <b>{quantity}</b>
+        </p>
         <CustomButton text='Supprimer du panier' onClick={() => removeItem(id)} />
       </div>
       <div className={classes.priceItem}>

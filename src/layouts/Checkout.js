@@ -61,13 +61,21 @@ const useStyles = makeStyles({
 
 const mapState = state => {
   return {
-    user: state.loggedUser.user,
     cart: state.cart.cart
   }
 }
 
 const Checkout = ({ cart }) => {
   const classes = useStyles()
+
+  const totalPrice = () => {
+    const prices = []
+    cart.map(item => prices.push(item.price * item.quantity))
+    const total = prices.reduce((initVal, nextVal) => {
+      return initVal + nextVal
+    }, 0)
+    return total
+  }
 
   const displayItems = () => {
     if (cart.length === 0) {
@@ -92,10 +100,11 @@ const Checkout = ({ cart }) => {
         </div>
         <div className={classes.subtotalPrice}>
           <span>
-            Sous-total (2 articles):{' '}
+            {`Sous-total (${cart.length} ${cart.length > 1 ? 'articles' : 'article'}):`}{' '}
             <CurrencyFormat
               className={classes.subtotalCurrencyFormat}
-              value={1200}
+              value={totalPrice()}
+              decimalScale={2}
               displayType={'text'}
               thousandSeparator={true}
               suffix={'€'}
