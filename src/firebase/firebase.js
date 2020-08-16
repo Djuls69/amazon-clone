@@ -14,3 +14,24 @@ firebase.initializeApp({
 
 export const auth = firebase.auth()
 export const db = firebase.firestore()
+
+export const SignInWithGoogle = async () => {
+  const provider = new firebase.auth.GoogleAuthProvider()
+  await firebase.auth().signInWithPopup(provider)
+}
+
+export const createUserProfileDB = async (user, otherData) => {
+  if (!user) return
+  const { uid, displayName, email } = user
+  const userProfile = {
+    id: uid,
+    name: displayName,
+    email,
+    timestamp: new Date(),
+    ...otherData
+  }
+  const ref = await db.collection('users').doc(uid).get()
+  if (!ref.exists) {
+    await db.collection('users').doc(uid).set(userProfile)
+  }
+}

@@ -15,14 +15,16 @@ export const registerStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column'
   },
+  formContainer: {
+    border: '1px solid #ccc',
+    borderRadius: 3,
+    marginBottom: '3rem'
+  },
   loginForm: {
     width: '100%',
     padding: '2rem',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
     display: 'flex',
-    flexDirection: 'column',
-    marginBottom: '3rem'
+    flexDirection: 'column'
   },
   loginTitle: {
     fontSize: '2.8rem',

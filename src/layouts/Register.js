@@ -5,7 +5,7 @@ import logo2 from '../assets/img/amazon-logo2.png'
 import { Link, withRouter } from 'react-router-dom'
 import { registerStyles } from './RegisterStyles'
 import { Alert } from '@material-ui/lab'
-import { auth } from '../firebase/firebase'
+import { auth, createUserProfileDB } from '../firebase/firebase'
 
 const validate = values => {
   const errors = {}
@@ -36,7 +36,7 @@ const validate = values => {
   return errors
 }
 
-const Register = ({ history, changeDisplayName }) => {
+const Register = ({ history }) => {
   const classes = registerStyles()
 
   const formik = useFormik({
@@ -47,15 +47,16 @@ const Register = ({ history, changeDisplayName }) => {
       repeatPassword: ''
     },
     validate,
-    onSubmit: values => {
-      createNewUser(values.name, values.email, values.password)
+    onSubmit: async values => {
+      await createNewUser(values.name, values.email, values.password)
     }
   })
 
   const createNewUser = async (name, email, password) => {
     try {
-      changeDisplayName(name)
       await auth.createUserWithEmailAndPassword(email, password)
+      const user = auth.currentUser
+      await createUserProfileDB(user, { name })
       history.push('/')
     } catch (error) {
       console.error("Impossible d'enregistrer cet utilisateur", error.message)
@@ -70,63 +71,67 @@ const Register = ({ history, changeDisplayName }) => {
             <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
           </Link>
         </div>
-        <form className={classes.loginForm} onSubmit={formik.handleSubmit}>
-          <h1 className={classes.loginTitle}>Créer un compte</h1>
-          <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>Votre nom</label>
-            <input
-              name='name'
-              value={formik.values.name}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type='text'
-            />
-            {formik.errors.name && formik.touched.name ? <Alert severity='error'>{formik.errors.name}</Alert> : null}
-          </div>
-          <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>E-email</label>
-            <input
-              name='email'
-              value={formik.values.email}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type='email'
-            />
-            {formik.errors.email && formik.touched.email ? <Alert severity='error'>{formik.errors.email}</Alert> : null}
-          </div>
-          <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>Mot de passe</label>
-            <input
-              name='password'
-              value={formik.values.password}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type='password'
-            />
-            {formik.errors.password && formik.touched.password ? (
-              <Alert severity='error'>{formik.errors.password}</Alert>
-            ) : null}
-          </div>
-          <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>Entrez le mot de passe à nouveau</label>
-            <input
-              name='repeatPassword'
-              value={formik.values.repeatPassword}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type='password'
-            />
-            {formik.errors.repeatPassword && formik.touched.repeatPassword ? (
-              <Alert severity='error'>{formik.errors.repeatPassword}</Alert>
-            ) : null}
-          </div>
-          <CustomButton type='submit' text='Créer votre compte Amazon' />
-          <p className={classes.formCopy}>
-            En créant un compte, vous acceptez les Conditions générales de vente d’Amazon. Veuillez consulter notre
-            Notice Protection de vos Informations Personnelles, notre Notice Cookies et notre Notice Annonces
-            publicitaires basées sur vos centres d’intérêt.
-          </p>
-        </form>
+        <div className={classes.formContainer}>
+          <form className={classes.loginForm} onSubmit={formik.handleSubmit}>
+            <h1 className={classes.loginTitle}>Créer un compte</h1>
+            <div className={classes.inputForm}>
+              <label className={classes.loginLabel}>Votre nom</label>
+              <input
+                name='name'
+                value={formik.values.name}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type='text'
+              />
+              {formik.errors.name && formik.touched.name ? <Alert severity='error'>{formik.errors.name}</Alert> : null}
+            </div>
+            <div className={classes.inputForm}>
+              <label className={classes.loginLabel}>E-email</label>
+              <input
+                name='email'
+                value={formik.values.email}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type='email'
+              />
+              {formik.errors.email && formik.touched.email ? (
+                <Alert severity='error'>{formik.errors.email}</Alert>
+              ) : null}
+            </div>
+            <div className={classes.inputForm}>
+              <label className={classes.loginLabel}>Mot de passe</label>
+              <input
+                name='password'
+                value={formik.values.password}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type='password'
+              />
+              {formik.errors.password && formik.touched.password ? (
+                <Alert severity='error'>{formik.errors.password}</Alert>
+              ) : null}
+            </div>
+            <div className={classes.inputForm}>
+              <label className={classes.loginLabel}>Entrez le mot de passe à nouveau</label>
+              <input
+                name='repeatPassword'
+                value={formik.values.repeatPassword}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type='password'
+              />
+              {formik.errors.repeatPassword && formik.touched.repeatPassword ? (
+                <Alert severity='error'>{formik.errors.repeatPassword}</Alert>
+              ) : null}
+            </div>
+            <CustomButton type='submit' text='Créer votre compte Amazon' />
+            <p className={classes.formCopy}>
+              En créant un compte, vous acceptez les Conditions générales de vente d’Amazon. Veuillez consulter notre
+              Notice Protection de vos Informations Personnelles, notre Notice Cookies et notre Notice Annonces
+              publicitaires basées sur vos centres d’intérêt.
+            </p>
+          </form>
+        </div>
         <div className={classes.divider}>
           <span>Vous possédez déjà un compte ?</span>{' '}
           <Link className={classes.dividerLink} to='/login'>

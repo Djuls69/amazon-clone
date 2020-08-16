@@ -15,14 +15,13 @@ export const loginStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column'
   },
-  loginForm: {
-    width: '100%',
-    padding: '2rem',
+  formContainer: {
     border: '1px solid #ccc',
-    borderRadius: '4px',
+    borderRadius: 3,
+    marginBottom: '3rem',
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: '3rem'
+    padding: '2rem'
   },
   loginTitle: {
     fontSize: '2.8rem',

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { loginStyles } from './LoginStyles'
 import { useFormik } from 'formik'
 import { Alert } from '@material-ui/lab'
-import { auth } from '../firebase/firebase'
+import { auth, SignInWithGoogle } from '../firebase/firebase'
 
 const validate = values => {
   const errors = {}
@@ -47,6 +47,11 @@ const Login = ({ history }) => {
     }
   }
 
+  const googleFunction = async () => {
+    await SignInWithGoogle()
+    history.push('/')
+  }
+
   return (
     <section className={classes.login}>
       <div className={classes.container}>
@@ -55,39 +60,51 @@ const Login = ({ history }) => {
             <img className={classes.loginLogo} src={logo2} alt='Amazon Logo' />
           </Link>
         </div>
-        <form className={classes.loginForm} onSubmit={formik.handleSubmit}>
-          <h1 className={classes.loginTitle}>S'identifier</h1>
-          <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>Adresse e-email</label>
-            <input
-              name='email'
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              type='email'
-            />
-            {formik.errors.email && formik.touched.email ? <Alert severity='error'>{formik.errors.email}</Alert> : null}
-          </div>
-          <div className={classes.inputForm}>
-            <label className={classes.loginLabel}>Mot de passe</label>
-            <input
-              name='password'
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              type='password'
-            />
-            {formik.errors.password && formik.touched.password ? (
-              <Alert severity='error'>{formik.errors.password}</Alert>
-            ) : null}
-          </div>
-          {signInError && <Alert severity='error'>Mauvais identifiants. Merci de réessayer</Alert>}
-          <CustomButton type='submit' text="S'identifier" />
-        </form>
+        <div className={classes.formContainer}>
+          <form className={classes.loginForm} onSubmit={formik.handleSubmit}>
+            <h1 className={classes.loginTitle}>S'identifier</h1>
+            <div className={classes.inputForm}>
+              <label className={classes.loginLabel}>Adresse e-email</label>
+              <input
+                name='email'
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                type='email'
+              />
+              {formik.errors.email && formik.touched.email ? (
+                <Alert severity='error'>{formik.errors.email}</Alert>
+              ) : null}
+            </div>
+            <div className={classes.inputForm}>
+              <label className={classes.loginLabel}>Mot de passe</label>
+              <input
+                name='password'
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                type='password'
+              />
+              {formik.errors.password && formik.touched.password ? (
+                <Alert severity='error'>{formik.errors.password}</Alert>
+              ) : null}
+            </div>
+            {signInError && <Alert severity='error'>Mauvais identifiants. Merci de réessayer</Alert>}
+            <div className={classes.inputForm}>
+              <CustomButton type='submit' text="S'identifier" />
+            </div>
+          </form>
+          <CustomButton onClick={googleFunction} text="S'identifier avec Google" isGoogle />
+        </div>
         <div className={classes.divider}>
           <span>Nouveau chez Amazon ?</span>
         </div>
-        <CustomButton onClick={() => history.push('/register')} secondary text='Créer votre compte Amazon' />
+        <CustomButton
+          type='button'
+          onClick={() => history.push('/register')}
+          secondary
+          text='Créer votre compte Amazon'
+        />
       </div>
     </section>
   )

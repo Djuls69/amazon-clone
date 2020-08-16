@@ -88,7 +88,7 @@ const HeaderOptions = ({ loggedUser: { user }, history }) => {
       <Link to={user ? `/checkout/${user.id}/basket` : '#!'} className={classes.headerLink}>
         <div className={classes.headerIcon}>
           <ShoppingCartIcon style={{ fontSize: '3.2rem' }} />
-          <span className={classes.headerBasketCount}>{user ? user.basket.length : 0}</span>
+          <span className={classes.headerBasketCount}>0</span>
           <span className={classes.headerOptionTextTwo}>Panier</span>
         </div>
       </Link>
