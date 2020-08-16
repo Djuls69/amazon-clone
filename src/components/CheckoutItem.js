@@ -1,6 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import CustomButton from './CustomButton'
+import { removeToCart } from '../redux/actions'
+import { connect } from 'react-redux'
+import CurrencyFormat from 'react-currency-format'
 
 const useStyles = makeStyles({
   checkoutItem: {
@@ -32,18 +35,24 @@ const useStyles = makeStyles({
   }
 })
 
-const CheckoutItem = ({ imageURL, name, price }) => {
+const mapDispatch = dispatch => ({
+  removeItem: id => dispatch(removeToCart(id))
+})
+
+const CheckoutItem = ({ id, imageURL, name, price, removeItem }) => {
   const classes = useStyles()
   return (
     <div className={classes.checkoutItem}>
       <img className={classes.imageItem} src={imageURL} alt={name} />
       <div className={classes.nameItem}>
         <h1>{name}</h1>
-        <CustomButton text='Supprimer du panier' />
+        <CustomButton text='Supprimer du panier' onClick={() => removeItem(id)} />
       </div>
-      <div className={classes.priceItem}>{price}</div>
+      <div className={classes.priceItem}>
+        <CurrencyFormat value={price} displayType={'text'} thousandSeparator={true} suffix={'€'} />
+      </div>
     </div>
   )
 }
 
-export default CheckoutItem
+export default connect(null, mapDispatch)(CheckoutItem)
