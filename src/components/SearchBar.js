@@ -2,12 +2,15 @@ import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   searchbar: {
     marginLeft: '7rem',
     display: 'flex',
     alignItems: 'center',
-    flex: 1
+    flex: 1,
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0.5rem'
+    }
   },
   searchbarInput: {
     height: '100%',
@@ -35,7 +38,7 @@ const useStyles = makeStyles({
   searchbarIcon: {
     fontSize: '3rem'
   }
-})
+}))
 
 const SearchBar = () => {
   const classes = useStyles()

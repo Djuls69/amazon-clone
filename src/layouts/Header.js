@@ -5,9 +5,10 @@ import SearchBar from '../components/SearchBar'
 import HeaderOptions from '../components/HeaderOptions'
 import { Link } from 'react-router-dom'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   header: {
     height: '6rem',
+    width: '100%',
     background: '#131921',
     display: 'flex',
     padding: '1rem',
@@ -16,17 +17,26 @@ const useStyles = makeStyles({
     top: 0,
     zIndex: 10000
   },
+  headerLogoLink: {
+    width: '14rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '5rem'
+    }
+  },
   headerLogo: {
     height: '100%',
-    objectFit: 'contain'
+    objectFit: 'contain',
+    [theme.breakpoints.down('sm')]: {
+      width: '70%'
+    }
   }
-})
+}))
 
 const Header = () => {
   const classes = useStyles()
   return (
     <nav className={classes.header}>
-      <Link style={{ width: '14rem' }} to='/'>
+      <Link to='/' className={classes.headerLogoLink}>
         <img className={classes.headerLogo} src={amazonLogo} alt='Amazon Logo' />
       </Link>
       <SearchBar />

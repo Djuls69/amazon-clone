@@ -5,15 +5,14 @@ import List from '../components/List'
 
 const useStyles = makeStyles({
   homeContainer: {
-    maxWidth: 1500,
+    maxWidth: 1300,
     margin: '0 auto'
   },
   homeImage: {
-    maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))',
-    zIndex: '-100000',
     width: '100%',
+    position: 'relative',
     objectFit: 'contain',
-    position: 'relative'
+    maskImage: 'linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0))'
   },
   backToTop: {
     height: '5rem',
@@ -35,9 +34,7 @@ const Home = () => {
   return (
     <Fragment>
       <div className={classes.homeContainer}>
-        <div className={classes.homeImage}>
-          <img src={home1} alt='' />
-        </div>
+        <img className={classes.homeImage} src={home1} alt='' />
         <List />
       </div>
       <div onClick={() => window.scrollTo(0, 0)} className={classes.backToTop}>

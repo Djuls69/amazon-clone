@@ -5,11 +5,11 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { connect } from 'react-redux'
 import { auth } from '../firebase/firebase'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   headerOptions: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   headerLink: {
     textDecoration: 'none',
@@ -28,11 +28,17 @@ const useStyles = makeStyles({
   },
   headerOptionTextOne: {
     fontSize: '1.2rem',
-    color: '#ccc'
+    color: '#ccc',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.7rem'
+    }
   },
   headerOptionTextTwo: {
     fontSize: '1.4rem',
-    fontWeight: 700
+    fontWeight: 700,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1rem'
+    }
   },
   headerBasketCount: {
     position: 'absolute',
@@ -40,9 +46,18 @@ const useStyles = makeStyles({
     left: '3.2rem',
     fontSize: '1.5rem',
     fontWeight: 700,
-    color: '#f3a847'
+    color: '#f3a847',
+    [theme.breakpoints.down('sm')]: {
+      left: '2.5rem'
+    }
+  },
+  cartIcon: {
+    fontSize: '3.2rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '2rem'
+    }
   }
-})
+}))
 
 const mapState = state => ({
   loggedUser: state.loggedUser,
@@ -76,21 +91,9 @@ const HeaderOptions = ({ cart, loggedUser: { user }, history }) => {
           </div>
         </div>
       )}
-      <Link to='/' className={classes.headerLink}>
-        <div className={classes.headerOption}>
-          <span className={classes.headerOptionTextOne}>Retour</span>
-          <span className={classes.headerOptionTextTwo}>et Commandes</span>
-        </div>
-      </Link>
-      <Link to='/' className={classes.headerLink}>
-        <div className={classes.headerOption}>
-          <span className={classes.headerOptionTextOne}>Testez</span>
-          <span className={classes.headerOptionTextTwo}>Prime</span>
-        </div>
-      </Link>
       <Link to='/checkout/basket' className={classes.headerLink}>
         <div className={classes.headerIcon}>
-          <ShoppingCartIcon style={{ fontSize: '3.2rem' }} />
+          <ShoppingCartIcon className={classes.cartIcon} />
           <span className={classes.headerBasketCount}>{cart.length}</span>
           <span className={classes.headerOptionTextTwo}>Panier</span>
         </div>
