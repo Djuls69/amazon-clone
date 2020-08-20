@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   searchbarInput: {
-    height: '100%',
+    height: '4rem',
     width: '100%',
     border: 'none',
     borderRadius: '3px 0 0 3px',
@@ -22,10 +22,13 @@ const useStyles = makeStyles(theme => ({
     padding: '0 1rem',
     '&:focus': {
       outline: 'none'
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: '2rem'
     }
   },
   searchbarButton: {
-    height: '100%',
+    height: '4rem',
     width: '4.5rem',
     border: 'none',
     borderRadius: '0 3px 3px 0',
@@ -33,10 +36,17 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
     '&:focus': {
       outline: 'none'
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: '2rem',
+      width: '2.5rem'
     }
   },
   searchbarIcon: {
-    fontSize: '3rem'
+    fontSize: '3rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1rem'
+    }
   }
 }))
 

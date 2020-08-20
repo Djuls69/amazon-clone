@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   header: {
-    height: '6rem',
     width: '100%',
     background: '#131921',
     display: 'flex',
+    alignItems: 'center',
     padding: '1rem',
     paddingRight: '2rem',
     position: 'sticky',
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   headerLogo: {
-    height: '100%',
+    width: '100%',
     objectFit: 'contain',
     [theme.breakpoints.down('sm')]: {
       width: '70%'
