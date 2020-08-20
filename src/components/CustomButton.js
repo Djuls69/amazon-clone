@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   itemButton: {
     padding: '0.6rem',
     border: '1px solid',
@@ -11,7 +11,13 @@ const useStyles = makeStyles({
     display: 'block',
     color: '#2f3841',
     fontSize: '1.3rem',
-    fontWeight: 500
+    fontWeight: 500,
+    [theme.breakpoints.down('md')]: {
+      fontSize: '1rem'
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.7rem'
+    }
   },
   itemButtonOrange: {
     backgroundColor: '#f3cf77',
@@ -33,7 +39,7 @@ const useStyles = makeStyles({
       backgroundColor: '#415eae'
     }
   }
-})
+}))
 
 const CustomButton = ({ text, secondary, isGoogle, ...otherProps }) => {
   const classes = useStyles()

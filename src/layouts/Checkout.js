@@ -1,20 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import CheckoutItem from '../components/CheckoutItem'
-import { makeStyles, Checkbox } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import CurrencyFormat from 'react-currency-format'
 import CustomButton from '../components/CustomButton'
 import { connect } from 'react-redux'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   checkout: {
     padding: '3rem 2rem',
     backgroundColor: '#fff',
-    display: 'flex'
+    display: 'flex',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      padding: '3rem 0.5rem'
+    }
   },
   checkoutItems: {
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
+    width: '70%',
     marginRight: '2rem'
   },
   checkoutDivider: {
@@ -29,25 +33,37 @@ const useStyles = makeStyles({
     }
   },
   subtotal: {
-    height: '25rem',
-    width: '32rem',
+    width: '100%',
+    marginLeft: 'auto',
     border: '1px solid #ccc',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {}
   },
   subtotalCopy: {
-    flex: 0.5,
+    height: '50%',
     padding: '1rem',
     fontSize: '1.2rem',
-    lineHeight: 1.8
+    lineHeight: 1.8,
+    [theme.breakpoints.down('md')]: {
+      fontSize: '1rem'
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.6rem',
+      padding: '0.5rem'
+    }
   },
   subtotalPrice: {
-    flex: 0.5,
+    height: '50%',
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem',
     backgroundColor: '#eee',
-    fontSize: '1.7rem'
+    fontSize: '1.7rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.8rem',
+      padding: '0.5rem'
+    }
   },
   subtotalCurrencyFormat: {
     fontWeight: 700
@@ -55,9 +71,12 @@ const useStyles = makeStyles({
   subtotalCheckbox: {
     fontSize: '1.3rem',
     display: 'block',
-    margin: '1rem 0'
+    margin: '1rem 0',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.8rem'
+    }
   }
-})
+}))
 
 const mapState = state => {
   return {
@@ -67,6 +86,10 @@ const mapState = state => {
 
 const Checkout = ({ cart }) => {
   const classes = useStyles()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const totalPrice = () => {
     const prices = []
@@ -93,27 +116,29 @@ const Checkout = ({ cart }) => {
         </div>
         {displayItems()}
       </div>
-      <div className={classes.subtotal}>
-        <div className={classes.subtotalCopy}>
-          Votre commande est éligible à la livraison Standard gratuite en France métropolitaine. restrictions
-          applicables Choisissez cette option lors de votre commande
-        </div>
-        <div className={classes.subtotalPrice}>
-          <span>
-            {`Sous-total (${cart.length} ${cart.length > 1 ? 'articles' : 'article'}):`}{' '}
-            <CurrencyFormat
-              className={classes.subtotalCurrencyFormat}
-              value={totalPrice()}
-              decimalScale={2}
-              displayType={'text'}
-              thousandSeparator={true}
-              suffix={'€'}
-            />
-          </span>
-          <span className={classes.subtotalCheckbox}>
-            <Checkbox disableRipple size='small' color='primary' /> Commande comportant un cadeau
-          </span>
-          <CustomButton text='Passer la commande' />
+      <div style={{ width: '28%' }}>
+        <div className={classes.subtotal}>
+          <div className={classes.subtotalCopy}>
+            Votre commande est éligible à la livraison Standard gratuite en France métropolitaine. restrictions
+            applicables Choisissez cette option lors de votre commande
+          </div>
+          <div className={classes.subtotalPrice}>
+            <span>
+              {`Sous-total (${cart.length} ${cart.length > 1 ? 'articles' : 'article'}):`}{' '}
+              <CurrencyFormat
+                className={classes.subtotalCurrencyFormat}
+                value={totalPrice()}
+                decimalScale={2}
+                displayType={'text'}
+                thousandSeparator={true}
+                suffix={'€'}
+              />
+            </span>
+            <span className={classes.subtotalCheckbox}>
+              <input type='checkbox' /> Commande comportant un cadeau
+            </span>
+            <CustomButton text='Passer la commande' />
+          </div>
         </div>
       </div>
     </div>
