@@ -6,15 +6,30 @@ import CustomButton from './CustomButton'
 import { connect } from 'react-redux'
 import { addToCart } from '../redux/actions'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
+  itemPaper: {
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+      margin: '0 auto'
+    }
+  },
   itemImageContainer: {
     background: '#fff',
     marginBottom: '2rem',
-    padding: '1rem'
+    padding: '1rem',
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+      marginBottom: 0
+    }
   },
   itemImage: {
     height: '25rem',
-    objectFit: 'contain'
+    objectFit: 'contain',
+    [theme.breakpoints.down('sm')]: {
+      width: '50%',
+      height: '50%',
+      objectFit: 'contain'
+    }
   },
   itemBody: {
     height: '14rem',
@@ -22,7 +37,10 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     justifyContent: 'space-between',
     padding: '1rem 2rem',
-    background: '#FAFAFA'
+    background: '#FAFAFA',
+    [theme.breakpoints.down('sm')]: {
+      height: '15rem'
+    }
   },
   itemStars: {
     color: '#f3a847',
@@ -36,7 +54,7 @@ const useStyles = makeStyles({
     fontSize: '1.3rem',
     fontWeight: 400
   }
-})
+}))
 
 const mapState = state => ({
   user: state.loggedUser.user,
@@ -52,7 +70,7 @@ const ListItem = ({ item, addToCart, user }) => {
   const classes = useStyles()
 
   return (
-    <Paper>
+    <Paper className={classes.itemPaper}>
       <div className={classes.itemImageContainer}>
         <img className={classes.itemImage} src={imageURL} alt={name} />
       </div>
