@@ -37,7 +37,7 @@ const Home = () => {
         <img className={classes.homeImage} src={home1} alt='' />
         <List />
       </div>
-      <div onClick={() => window.scrollTo(0, 0)} className={classes.backToTop}>
+      <div onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className={classes.backToTop}>
         Retour en haut
       </div>
     </Fragment>

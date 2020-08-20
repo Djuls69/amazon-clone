@@ -3,7 +3,7 @@ import { makeStyles, Container } from '@material-ui/core'
 import logo from '../assets/img/amazon-logo.png'
 import { Link } from 'react-router-dom'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   footer: {
     backgroundColor: '#232f3f',
     padding: '2rem 0'
@@ -23,11 +23,17 @@ const useStyles = makeStyles({
   },
   footerText: {
     color: '#fff',
-    fontSize: '1.6rem'
+    fontSize: '1.6rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.2rem'
+    }
   },
   footerMuted: {
     color: '#ccc',
-    fontSize: '1.4rem'
+    fontSize: '1.4rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1rem'
+    }
   },
   footerLinks: {
     color: '#fff',
@@ -38,13 +44,16 @@ const useStyles = makeStyles({
     display: 'inline-block',
     '&:hover': {
       textDecoration: 'underline'
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1rem'
     }
   },
   footerLinkHref: {
     color: '#fff',
     textDecoration: 'underline'
   }
-})
+}))
 
 const Footer = () => {
   const classes = useStyles()
